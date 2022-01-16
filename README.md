@@ -25,3 +25,14 @@ above
 - Database must be postgres/Mysql.
 
 - The backend must be designed in Django. You are free to use any library to design the above system.
+
+## .env File Format:
+
+```
+SECRET_KEY = ' '
+DATABASE = ' '
+HOST = ' '
+PORT =  
+USER = ' '
+PASSWORD = ' '
+```
