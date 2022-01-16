@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import QuestionareSerializer
 from django.db.models import Q
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
 # Create your views here.
 
@@ -43,6 +45,20 @@ class QuestionareAll(APIView):
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+class AssignAgentView(APIView):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+    def get(self, request, id):
+        lead = Questionare.objects.filter(Q(claimed_by = None) or Q(claimed_by = "")).get(pk=id)
+        serialized = QuestionareAll(lead)
+
+        return Response(
+            serialized.data,
+            status=status.HTTP_202_ACCEPTED
+        )
+    def put(self, request, id):
+        pass
 
 
 
