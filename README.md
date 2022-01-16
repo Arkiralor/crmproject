@@ -17,14 +17,26 @@ employee/counsellor.
 will assign the enquiry to only this counsellor inside the CRM & this enquiry will no longer be
 publically visible to any other employee. We can say that this is now a private enquiry.
 
-5. Django Admin Panel for CRUD operations of all the relevant fields, implemented
-above
+<!-- 5. Django Admin Panel for CRUD operations of all the relevant fields, implemented
+above -->
 
 ## Constraint:
 
-- Database must be postgres/Mysql.
+- Database must be PostgreSQL/MySQL.
 
 - The backend must be designed in DjangoRestFramework.
+
+## Steps for Development:
+
+1. First create a blank database as per requirements.
+2. Create the .env file as per format given below.
+3. Fill values of .env file as per constraints of system.
+4. Run: ``` python manage.py makemigrations ```
+5. Run: ``` python manage.py migrate ```
+6. Run: ``` python manage.py createsuperuser```
+    
+    - Add superuser credentials as required.
+7. Run: ``` python manage.py runserver```
 
 ## .env File Format:
 
@@ -37,7 +49,11 @@ USER = ' '
 PASSWORD = ' '
 ```
 
-## Documentation::
+## Applications:
+
+1. [FormAapp/](https://github.com/Arkiralor/crmproject/tree/master/formapp)
+
+## Documentation:
 
 
 Postman-generated documentation for backend can be found [here](https://documenter.getpostman.com/view/17779018/UVXjLbeq).
