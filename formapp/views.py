@@ -53,8 +53,9 @@ class AssignAgentView(APIView):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
     def get(self, request, id):
+        agent = Agent.objects.filter(user = request.user).first()
         try:
-            lead = Questionare.objects.filter(Q(claimed_by = None) or Q(claimed_by = "")).get(pk=id)
+            lead = Questionare.objects.filter((Q(claimed_by = None) or Q(claimed_by = agent)) and Q(id = id)).first()
             lead_serialized = QuestionareSerializerAll(lead)
         except Questionare.DoesNotExist:
             return Response(
@@ -69,17 +70,19 @@ class AssignAgentView(APIView):
             )
        
     def post(self, request, id):
+        agent = Agent.objects.filter(user = request.user).first()
         try:
-            lead = Questionare.objects.filter(Q(claimed_by = None) or Q(claimed_by = "")).get(pk=id)
+            # lead = Questionare.objects.filter(Q(claimed_by = None) or Q(claimed_by = "") or Q(claimed_by = agent)).get(pk=id)
+            lead = Questionare.objects.filter(Q(id = id) or Q(claimed_by = agent)).first()
         except Questionare.DoesNotExist:
             return Response(
                 {
                     "error": "Lead already claimed."
                 },
-                status=status.HTTP_400_UNAUTHORIZED
+                status=status.HTTP_400_BAD_REQUEST
             )
         if not lead.claimed_by:
-            agent = Agent.objects.filter(user = request.user).first()
+            # agent = Agent.objects.filter(user = request.user).first()
             lead.claimed_by = agent
             lead.save()
             serialized = QuestionareSerializerAll(lead)
@@ -87,6 +90,13 @@ class AssignAgentView(APIView):
             return Response(
                 serialized.data,
                 status=status.HTTP_202_ACCEPTED
+            )
+        elif lead.claimed_by == agent:
+            return Response(
+                {
+                    "error": "You have already claimed this."
+                },
+                status=status.HTTP_400_BAD_REQUEST
             )
 
 
