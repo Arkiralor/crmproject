@@ -37,12 +37,12 @@ above -->
     - ```bin``` for ___Linux___/__Mac__/__Unix__.
 6. Run ```python -m pip install -r requirements.txt``` to install all dependencies within the _virtual environment_.
     - Debug and install the dependencies manually via ```pip``` if the ```cannot configure/install wheel``` error pops up.
-4. Run: ``` python manage.py makemigrations ```
-5. Run: ``` python manage.py migrate ```
-6. Run: ``` python manage.py createsuperuser```
+7. Run: ``` python manage.py makemigrations ```
+8. Run: ``` python manage.py migrate ```
+9. Run: ``` python manage.py createsuperuser```
     
     - Add __superuser__ credentials as required.
-7. Run: ``` python manage.py runserver```
+10. Run: ``` python manage.py runserver```
 
 ## .env File Format:
 
