@@ -6,7 +6,8 @@ from .models import Questionare
 class QuestionareSerializer(serializers.ModelSerializer):
     class Meta:
         model = Questionare
-        fields = ['fname', 'lname', 'email', 'phone', 'course']
+        # fields = ['fname', 'lname', 'email', 'phone', 'course']
+        fields = '__all__'
 
 class QuestionareSerializerAll(serializers.ModelSerializer):
     class Meta:

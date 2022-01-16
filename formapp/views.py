@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from .models import Questionare
+from .models import Questionare, Agent, User
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import QuestionareSerializer, QuestionareSerializerAll
@@ -13,7 +13,10 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 class QuestionareAll(APIView):
 
     def get(self, request):
-        queryset = Questionare.objects.filter(Q(claimed_by = None) or Q(claimed_by = "")).all()
+        queryset = Questionare.objects.filter(
+            Q(claimed_by = None) 
+            or Q(claimed_by = "")
+            ).all()
         serialized = QuestionareSerializer(queryset, many=True)
 
         return Response(
@@ -51,18 +54,24 @@ class AssignAgentView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, id):
         lead = Questionare.objects.filter(Q(claimed_by = None) or Q(claimed_by = "")).get(pk=id)
-
+        lead_serialized = QuestionareSerializerAll(lead)
+        return Response(
+                lead_serialized.data,
+                status=status.HTTP_202_ACCEPTED
+            )
+       
+    def post(self, request, id):
+        lead = Questionare.objects.filter(Q(claimed_by = None) or Q(claimed_by = "")).get(pk=id)
         if not lead.claimed_by:
-            lead.claimed_by = request.user.id
-            serialized = QuestionareSerializerAll(lead)
+            agent = Agent.objects.filter(user = request.user).first()
+            lead.claimed_by = agent
             lead.save()
+            serialized = QuestionareSerializerAll(lead)
 
             return Response(
                 serialized.data,
                 status=status.HTTP_202_ACCEPTED
             )
-    def put(self, request, id):
-        pass
 
 
 
