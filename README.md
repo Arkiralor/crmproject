@@ -66,6 +66,9 @@ PASSWORD = ' '
 
 ## Documentation:
 
-
 Postman-generated documentation for backend can be found [here](https://documenter.getpostman.com/view/17779018/UVXjLbeq).
+
+### Contributors:
+
+1. [Prithoo Medhi](https://github.com/Arkiralor)
 
