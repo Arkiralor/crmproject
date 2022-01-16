@@ -53,15 +53,31 @@ class AssignAgentView(APIView):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
     def get(self, request, id):
-        lead = Questionare.objects.filter(Q(claimed_by = None) or Q(claimed_by = "")).get(pk=id)
-        lead_serialized = QuestionareSerializerAll(lead)
+        try:
+            lead = Questionare.objects.filter(Q(claimed_by = None) or Q(claimed_by = "")).get(pk=id)
+            lead_serialized = QuestionareSerializerAll(lead)
+        except Questionare.DoesNotExist:
+            return Response(
+                {
+                    "error": "Lead already claimed."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
         return Response(
                 lead_serialized.data,
                 status=status.HTTP_202_ACCEPTED
             )
        
     def post(self, request, id):
-        lead = Questionare.objects.filter(Q(claimed_by = None) or Q(claimed_by = "")).get(pk=id)
+        try:
+            lead = Questionare.objects.filter(Q(claimed_by = None) or Q(claimed_by = "")).get(pk=id)
+        except Questionare.DoesNotExist:
+            return Response(
+                {
+                    "error": "Lead already claimed."
+                },
+                status=status.HTTP_400_UNAUTHORIZED
+            )
         if not lead.claimed_by:
             agent = Agent.objects.filter(user = request.user).first()
             lead.claimed_by = agent
