@@ -1,7 +1,15 @@
 from django.db import models
 from django.core.validators import RegexValidator
+from django.contrib.auth.models import User
 
 # Create your models here.
+class Account(models.Model):
+    name = models.CharField(max_length=64)
+    email = models.EmailField()
+    isActive = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
 
 class Questionare(models.Model):
     '''
@@ -19,6 +27,7 @@ class Questionare(models.Model):
         ('BTech in EE', 'BTech(EE)'),
     )
     course = models.CharField(choices=COURSE_CHOICES, max_length=128)
+    claimed_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return self.fname+" "+self.lname

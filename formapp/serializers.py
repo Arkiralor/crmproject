@@ -6,4 +6,4 @@ from .models import Questionare
 class QuestionareSerializer(serializers.ModelSerializer):
     class Meta:
         model = Questionare
-        fields = '__all__'
+        fields = ['fname', 'lname', 'email', 'phone', 'course']
