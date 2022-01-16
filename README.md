@@ -48,6 +48,7 @@ above -->
     
     - Add __superuser__ credentials as required.
 10. Run: ``` python manage.py runserver```
+11. Go to: ```localhost:8000/admin``` and create an Agent instance using the __superuser__.
 
 ### .env File Format:
 
