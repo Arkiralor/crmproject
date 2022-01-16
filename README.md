@@ -25,7 +25,7 @@ publically visible to any other employee. We can say that this is now a private 
 <!-- 5. Django Admin Panel for CRUD operations of all the relevant fields, implemented
 above -->
 
-## Constraint:
+### Constraint:
 
 - Database must be PostgreSQL/MySQL.
 
@@ -49,7 +49,7 @@ above -->
     - Add __superuser__ credentials as required.
 10. Run: ``` python manage.py runserver```
 
-## .env File Format:
+### .env File Format:
 
 ```
 SECRET_KEY = ' '
