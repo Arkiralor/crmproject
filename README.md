@@ -26,16 +26,22 @@ above -->
 
 - The backend must be designed in DjangoRestFramework.
 
-## Steps for Development:
+## Steps for Setting Up Development Environment:
 
 1. First create a blank database as per requirements.
-2. Create the .env file as per format given below.
-3. Fill values of .env file as per constraints of system.
+2. Create the ```.env``` file as per format given below.
+3. Fill values of ```.env``` file as per constraints of system.
+4. Run: ``` python -m venv env``` to create a _virtual environment_.
+5. Run: ``` source env/scripts or bin/activate ``` to activate _virtual environment_.
+    - ```scripts``` for __Windows__.
+    - ```bin``` for ___Linux___/__Mac__/__Unix__.
+6. Run ```python -m pip install -r requirements.txt``` to install all dependencies within the _virtual environment_.
+    - Debug and install the dependencies manually via ```pip``` if the ```cannot configure/install wheel``` error pops up.
 4. Run: ``` python manage.py makemigrations ```
 5. Run: ``` python manage.py migrate ```
 6. Run: ``` python manage.py createsuperuser```
     
-    - Add superuser credentials as required.
+    - Add __superuser__ credentials as required.
 7. Run: ``` python manage.py runserver```
 
 ## .env File Format:
