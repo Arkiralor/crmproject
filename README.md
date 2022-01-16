@@ -1,4 +1,4 @@
-#  Backend for a Customer Relationship Management(CRM) system
+#  Backend for a CRM System
 
 ## Business Logic:
 
