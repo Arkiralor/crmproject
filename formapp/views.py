@@ -44,16 +44,6 @@ class QuestionareAll(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-class Claiming(APIView):
-    def get(self, request):
-        queryset = Questionare.objects.filter(claimed_by=request.user_id).all()
-        serialized = QuestionareSerializer(queryset, many=True)
-
-        return Response(
-            serialized.data,
-            status=status.HTTP_302_FOUND
-        )
-
 
 
 

@@ -1,19 +1,26 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
-from django.contrib.auth.models import User
+
 
 # Create your models here.
-class Account(models.Model):
-    name = models.CharField(max_length=64)
-    email = models.EmailField()
-    isActive = models.BooleanField(default=False)
+
+class User(AbstractUser):
+    pass
+
+
+class Agent(models.Model):
+    '''
+    Model for agents:
+    '''
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return self.user
 
 class Questionare(models.Model):
     '''
-    Model for questionare.
+    Model for questionare:
     '''
     fname = models.CharField(max_length=16)
     lname = models.CharField(max_length=16)
@@ -27,7 +34,7 @@ class Questionare(models.Model):
         ('BTech in EE', 'BTech(EE)'),
     )
     course = models.CharField(choices=COURSE_CHOICES, max_length=128)
-    claimed_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    claimed_by = models.ForeignKey(Agent, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return self.fname+" "+self.lname
