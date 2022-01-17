@@ -25,7 +25,7 @@ class Questionare(models.Model):
     fname = models.CharField(max_length=16)
     lname = models.CharField(max_length=16)
     email = models.EmailField(max_length=64)
-    PHONE_VALID = RegexValidator(r'^([0-9]){10}', "Hashtag doesn't comply.")
+    PHONE_VALID = RegexValidator(r'^([0-9]){10}', "Phone number invalid.")
     phone = models.CharField(max_length=10, validators=[PHONE_VALID])
     COURSE_CHOICES = (
         ('BSc in IT', 'BSc(IT)'),
