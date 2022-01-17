@@ -10,13 +10,20 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
 # Create your views here.
 
+
 class QuestionareAll(APIView):
+    '''
+    View class to either view all unclaimed leads or to create a new lead.
+    '''
 
     def get(self, request):
+        '''
+        GET all unclaimed leads.
+        '''
         queryset = Questionare.objects.filter(
-            Q(claimed_by = None) 
-            or Q(claimed_by = "")
-            ).all()
+            Q(claimed_by=None)
+            or Q(claimed_by="")
+        ).all()
         serialized = QuestionareSerializer(queryset, many=True)
 
         return Response(
@@ -25,6 +32,9 @@ class QuestionareAll(APIView):
         )
 
     def post(self, request):
+        '''
+        POST/create a new questionare/lead.
+        '''
         try:
             data = QuestionareSerializer(data=request.data)
         except Exception as err:
@@ -49,13 +59,22 @@ class QuestionareAll(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+
 class AssignAgentView(APIView):
+    '''
+    View class to assign a lead/questionare to an agent/employee.
+    '''
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
+
     def get(self, request, id):
-        agent = Agent.objects.filter(user = request.user).first()
+        '''
+        GET a single unclaimed lead or a lead claimed by the requesting user.
+        '''
+        agent = Agent.objects.filter(user=request.user).first()
         try:
-            lead = Questionare.objects.filter((Q(claimed_by = None) or Q(claimed_by = agent)) and Q(id = id)).first()
+            lead = Questionare.objects.filter(
+                (Q(claimed_by=None) or Q(claimed_by=agent)) and Q(id=id)).first()
             lead_serialized = QuestionareSerializerAll(lead)
         except Questionare.DoesNotExist:
             return Response(
@@ -65,12 +84,15 @@ class AssignAgentView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         return Response(
-                lead_serialized.data,
-                status=status.HTTP_202_ACCEPTED
-            )
-       
-    def post(self, request, id:int):
-        agent = Agent.objects.filter(user = request.user).first()
+            lead_serialized.data,
+            status=status.HTTP_202_ACCEPTED
+        )
+
+    def post(self, request, id: int):
+        '''
+        View to claim an unclaimed lead.
+        '''
+        agent = Agent.objects.filter(user=request.user).first()
         try:
             lead = Questionare.objects.get(pk=id)
         except Questionare.DoesNotExist:
@@ -81,7 +103,6 @@ class AssignAgentView(APIView):
                 status=status.HTTP_204_NO_CONTENT
             )
         if not lead.claimed_by:
-            # agent = Agent.objects.filter(user = request.user).first()
             lead.claimed_by = agent
             lead.save()
             serialized = QuestionareSerializerAll(lead)
@@ -104,8 +125,3 @@ class AssignAgentView(APIView):
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
-
-
-
-
-

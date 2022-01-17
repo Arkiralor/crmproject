@@ -18,6 +18,7 @@ class Agent(models.Model):
     def __str__(self):
         return self.user.username
 
+
 class Questionare(models.Model):
     '''
     Model for questionare:
@@ -34,8 +35,8 @@ class Questionare(models.Model):
         ('BTech in EE', 'BTech(EE)'),
     )
     course = models.CharField(choices=COURSE_CHOICES, max_length=128)
-    claimed_by = models.ForeignKey(Agent, on_delete=models.SET_NULL, null=True, blank=True)
+    claimed_by = models.ForeignKey(
+        Agent, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return self.fname+" "+self.lname
-
