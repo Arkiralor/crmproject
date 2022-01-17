@@ -72,16 +72,13 @@ class AssignAgentView(APIView):
     def post(self, request, id:int):
         agent = Agent.objects.filter(user = request.user).first()
         try:
-            # lead = Questionare.objects.filter(Q(claimed_by = None) or Q(claimed_by = "") or Q(claimed_by = agent)).get(pk=id)
-            # lead = Questionare.objects.filter(Q(id = id) or Q(claimed_by = agent)).first()
-            # lead = Questionare.objects.filter(Q(claimed_by = None)and Q(id = id)).first()
             lead = Questionare.objects.get(pk=id)
         except Questionare.DoesNotExist:
             return Response(
                 {
-                    "error": "Lead already claimed."
+                    "error": "This lead does not exist."
                 },
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_204_NO_CONTENT
             )
         if not lead.claimed_by:
             # agent = Agent.objects.filter(user = request.user).first()
@@ -98,7 +95,7 @@ class AssignAgentView(APIView):
                 {
                     "error": "Lead already claimed."
                 },
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_306_RESERVED
             )
         elif lead.claimed_by == agent:
             return Response(
