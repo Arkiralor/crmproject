@@ -69,11 +69,13 @@ class AssignAgentView(APIView):
                 status=status.HTTP_202_ACCEPTED
             )
        
-    def post(self, request, id):
+    def post(self, request, id:int):
         agent = Agent.objects.filter(user = request.user).first()
         try:
             # lead = Questionare.objects.filter(Q(claimed_by = None) or Q(claimed_by = "") or Q(claimed_by = agent)).get(pk=id)
-            lead = Questionare.objects.filter(Q(id = id) or Q(claimed_by = agent)).first()
+            # lead = Questionare.objects.filter(Q(id = id) or Q(claimed_by = agent)).first()
+            # lead = Questionare.objects.filter(Q(claimed_by = None)and Q(id = id)).first()
+            lead = Questionare.objects.get(pk=id)
         except Questionare.DoesNotExist:
             return Response(
                 {
@@ -90,6 +92,13 @@ class AssignAgentView(APIView):
             return Response(
                 serialized.data,
                 status=status.HTTP_202_ACCEPTED
+            )
+        elif lead.claimed_by != agent:
+            return Response(
+                {
+                    "error": "Lead already claimed."
+                },
+                status=status.HTTP_400_BAD_REQUEST
             )
         elif lead.claimed_by == agent:
             return Response(
