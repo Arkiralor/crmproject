@@ -6,12 +6,15 @@ from django.core.validators import RegexValidator
 # Create your models here.
 
 class User(AbstractUser):
+    '''
+    User from Django's default: AbstractUser.
+    '''
     pass
 
 
 class Agent(models.Model):
     '''
-    Model for agents:
+    Model for Agents dependent on model User:
     '''
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
